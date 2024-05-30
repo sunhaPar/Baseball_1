@@ -16,10 +16,11 @@ public:
 
 	}
 
-	GuessResult guess(const string& guessNumber)
+	GuessResult playRound(const string& guessNumber)
 	{
 		assertIllegalArgument(guessNumber);
-		if (guessNumber == question)
+
+		if (isCorrectAnswer(guessNumber))
 		{
 			return { true, 3, 0 };
 		}
@@ -34,24 +35,37 @@ public:
 
 private:
 	string question;
+	
+	bool isCorrectAnswer(const string& guessNumber)
+	{
+		return (guessNumber == question);
+	}
+
+	int getBallCount(int gIdx, char targetChar)
+	{
+		for (int qIdx = 0; qIdx < question.size(); qIdx++)
+		{
+			if (gIdx == qIdx) continue;
+			if (targetChar == question[qIdx])
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
 
 	void getStrikeAndBall(string guessNumber, GuessResult * result)
 	{
 		int nStrike = 0;
-		for (int i = 0; i< question.size(); i++)
+		for (int gIdx = 0; gIdx < question.size(); gIdx++)
 		{
-			if (guessNumber[i] == question[i])
+			if (guessNumber[gIdx] == question[gIdx])
 			{
 				result->strikes++;
 			}
 			else
 			{
-				for (int j = 0; j < question.size(); j++)
-				{
-					if (i == j) continue;
-
-					if (guessNumber[i] == question[j])  result->balls++;
-				}
+		    	result->balls += getBallCount(gIdx, guessNumber[gIdx]);
 			}
 		}
 	}

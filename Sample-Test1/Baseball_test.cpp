@@ -8,7 +8,7 @@ public:
 	{
 		//exception 발생해야 Pass
 		try {
-			game.guess(string(guessNumber));
+			game.playRound(string(guessNumber));
 			FAIL();
 		}
 		catch (exception e) { //pass
@@ -24,16 +24,15 @@ TEST_F(BaseballFixture, ThrowExceptionWhenInvalidCase) {
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIfMatchedNumber) {
-	GuessResult result = game.guess("123");
+	GuessResult result = game.playRound("123");
 
 	EXPECT_TRUE(result.solved);
 	EXPECT_EQ(3, result.strikes);
 	EXPECT_EQ(0, result.balls);
-
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIfTwoStrike) {
-	GuessResult result = game.guess("129");
+	GuessResult result = game.playRound("129");
 
 	EXPECT_FALSE(result.solved);
 	EXPECT_EQ(2, result.strikes);
@@ -41,7 +40,7 @@ TEST_F(BaseballFixture, ReturnSolvedResultIfTwoStrike) {
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIfTwoBall) {
-	GuessResult result = game.guess("812");
+	GuessResult result = game.playRound("812");
 
 	EXPECT_FALSE(result.solved);
 	EXPECT_EQ(0, result.strikes);
@@ -50,9 +49,17 @@ TEST_F(BaseballFixture, ReturnSolvedResultIfTwoBall) {
 
 
 TEST_F(BaseballFixture, ReturnSolvedResultIfOneStrikeTwoBall) {
-	GuessResult result = game.guess("132");
+	GuessResult result = game.playRound("132");
 
 	EXPECT_FALSE(result.solved);
 	EXPECT_EQ(1, result.strikes);
 	EXPECT_EQ(2, result.balls);
+}
+
+TEST_F(BaseballFixture, ReturnSolvedResultIfFail) {
+	GuessResult result = game.playRound("456");
+
+	EXPECT_FALSE(result.solved);
+	EXPECT_EQ(0, result.strikes);
+	EXPECT_EQ(0, result.balls);
 }
