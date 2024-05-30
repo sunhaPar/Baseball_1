@@ -1,5 +1,5 @@
 #include <stdexcept>
-
+#include <vector>
 using namespace std;
 
 struct GuessResult {
@@ -24,12 +24,9 @@ public:
 			return { true, 3, 0 };
 		}
 
-		GuessResult result;
-		result.solved = false;
+		GuessResult result = {false, 0, 0};
 
-		result.strikes = getStrike(guessNumber);
-		result.balls = 0;
-
+		getStrikeAndBall(guessNumber, &result);
 		return result;
 	}
 
@@ -38,14 +35,25 @@ public:
 private:
 	string question;
 
-	int getStrike(string guessNumber)
+	void getStrikeAndBall(string guessNumber, GuessResult * result)
 	{
 		int nStrike = 0;
 		for (int i = 0; i< question.size(); i++)
 		{
-			if (guessNumber[i] == question[i]) nStrike++;
+			if (guessNumber[i] == question[i])
+			{
+				result->strikes++;
+			}
+			else
+			{
+				for (int j = 0; j < question.size(); j++)
+				{
+					if (i == j) continue;
+
+					if (guessNumber[i] == question[j])  result->balls++;
+				}
+			}
 		}
-		return nStrike;
 	}
 
 	bool isDuplicateNumber(string guessNumber)
