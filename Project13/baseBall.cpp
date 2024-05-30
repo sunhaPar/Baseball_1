@@ -23,13 +23,30 @@ public:
 		{
 			return { true, 3, 0 };
 		}
-		return { true, 3, 0 };
+
+		GuessResult result;
+		result.solved = false;
+
+		result.strikes = getStrike(guessNumber);
+		result.balls = 0;
+
+		return result;
 	}
 
 
 
 private:
 	string question;
+
+	int getStrike(string guessNumber)
+	{
+		int nStrike = 0;
+		for (int i = 0; i< question.size(); i++)
+		{
+			if (guessNumber[i] == question[i]) nStrike++;
+		}
+		return nStrike;
+	}
 
 	bool isDuplicateNumber(string guessNumber)
 	{
